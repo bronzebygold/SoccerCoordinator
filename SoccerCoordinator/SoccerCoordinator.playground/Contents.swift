@@ -1,4 +1,29 @@
+// Soccer Coordinator - Project #1 for Team Treehouse Techdegree Program
+// by Daniel James Miller (completed Dec. 11, 2017)
+
 import UIKit
+
+// ---- FUNCTION DECLARATIONS ----
+
+// This functions takes an array of Ints and returns their average value as a Float
+// ------------------------------------------------------------------------------------------
+func average(heights: [Int]) -> Float {
+    let teamAverage: Float = ( (Float(heights.reduce(0, +))) / Float(heights.count) )
+    return teamAverage
+}
+// ------------------------------------------------------------------------------------------
+
+// This functions find the absolute-value distance between the largest and smalest members of an array of Floats
+// ------------------------------------------------------------------------------------------
+func range(averageHeights: [Float]) -> Float {
+    let variance: Float = abs((averageHeights.max() as! Float) - (averageHeights.min() as! Float))
+    return variance
+}
+// ------------------------------------------------------------------------------------------
+
+// ---- END OF FUNCTIONS ----
+
+
 
 // A 2D array is used to hold all player info.
 // Each index spot in "players" array contains an array listing that player's name, height, experience (as a bool) and guardians name/s.
@@ -62,14 +87,14 @@ var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[1] a
  The LOGIC is as follows:
     - Append the two pre-sorted "experienced" and "inexperienced" player arrays into a single array called "unassignedPlayers".
          This array already contains equal experienced and inexperienced players ranked in descending order by height (see
-         lines 55 and 56).
+         lines 74 and 75).
     - Then, append each unassigned player to a team, reverseing the order of the teams in the "teams" array each time anplayer
          is added so that the players heights stay uniform among all the teams.
  */
 
-var unassignedPlayers: [Any] = []
+var unassignedPlayers: [Any] = [] // An array to hold any players not yet assigned to teams
 
-// Put all the players together in one list.
+// Put all the unassigned players together in one list.
 // ------------------------------------------------------------------------------------------
 for player in experiencedPlayersSorted { unassignedPlayers.append(player) }
 for player in inexperiencedPlayersSorted { unassignedPlayers.append(player) }
@@ -78,7 +103,7 @@ for player in inexperiencedPlayersSorted { unassignedPlayers.append(player) }
 
 /* For loop read over the remaining (unassigned) players in "unassignedPlayers" and assign each player to a team.
 
-     NOTE: In line 85 we reverse the order of the teams in the "teams" array each time a player is added to any
+     NOTE: In line 87 we reverse the order of the teams in the "teams" array each time a player is added to any
      team so that player heights are distributed uniformly
 
  */
@@ -96,15 +121,15 @@ for x in 0..<unassignedPlayers.count {
 for x in 0..<teams.count {
     print("---- TEAM #\(x+1) ----")
     
-    let oneTeam: [Any] = teams[x] // oneTeam is just whichever of the teams we've pulled from "teams" in line 94
+    let oneTeam: [Any] = teams[x] // oneTeam is just whichever of the teams we've pulled from "teams" in the for-loop in line 96
     var aTeamsHeights: [Int] = []
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
         aTeamsHeights.append(playerInfo[1] as! Int)
     }
-    teamsHeights.append((Float(aTeamsHeights.reduce(0, +)) / Float(aTeamsHeights.count)))
+    teamsHeights.append(average(heights: aTeamsHeights))
     
-    print("(team #\(x+1)'s average height is \(Float(aTeamsHeights.reduce(0, +)) / Float(aTeamsHeights.count)) inches.)")
+    print("(team #\(x+1)'s average height is \(average(heights: aTeamsHeights)) inches.)")
     print(" ")
     for player in oneTeam {
         print("- \(player)")
@@ -116,9 +141,6 @@ for x in 0..<teams.count {
     
 }
 // ------------------------------------------------------------------------------------------
-
-// get the distance between min and max average heights:
-let teamsHeightsRange: Float = ((teamsHeights.max() as! Float) - (teamsHeights.min() as! Float))
 
 var letters = [Int: String]() // Declare a dictionary to hold the letters to guardians.
 
@@ -144,7 +166,7 @@ for x in 0..<teams.count {
     for x in 0..<oneTeam.count {
         let childName: String = aTeamsNames[x]
         let guardian: String = aTeamsGuardians[x]
-        letters[dictCounter] = "Dear \(guardian): \n\nI am writing today to let you know that \(childName) has been assigned to team \(teamNames[teamNumber]). Each team has been carefully \nsellected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league. \nAdditionally, the average height of all teams in the league has been kept within a range of \(teamsHeightsRange) inches. For team \n\(teamNames[teamNumber]), the first practice of the season will take place on \(practiceDates[teamNumber]). \n\nBest regards, \nYour Robot Overloard \n\n\n"
+        letters[dictCounter] = "Dear \(guardian): \n\nI am writing today to let you know that \(childName) has been assigned to team \(teamNames[teamNumber]). Each team has been carefully \nsellected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league. \nAdditionally, the average height of all teams in the league has been kept within a range of \(range(averageHeights: teamsHeights)) inches. For team \n\(teamNames[teamNumber]), the first practice of the season will take place on \(practiceDates[teamNumber]). \n\nBest regards, \nYour Robot Overloard \n\n\n"
         dictCounter += 1
     }
 }
@@ -153,6 +175,6 @@ for x in 0..<teams.count {
 // Print all letters from the dictionary "letters."
 // ------------------------------------------------------------------------------------------
 for x in 0..<letters.count {
-        print(letters[x] as! String)
+    print(letters[x] as! String)
 }
 // ------------------------------------------------------------------------------------------
