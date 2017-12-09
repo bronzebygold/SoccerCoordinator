@@ -56,46 +56,31 @@ var experiencedPlayersSorted: [[Any]] = experiencedPlayers.sorted { ($0[1] as! I
 var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[1] as! Int) > ($1[1] as! Int) }
 
  /*
- The GOAL is to have n number of teams with roughly equal experience level and average height.
+ The GOAL is to have n-number of teams with roughly equal experience level and average height varying not more than 1.5in.
  The LOGIC is as follows:
-    - Since "teams" arrays start out empty, first append the next unused value from "experiencedPlayers" to each list
-    - Append all remaining pre-sorted values into a single array called "playersSortedIntoOneArray". This array already
-      contains equal experienced and inexperienced players ranked in descending order by height.
-    - Finally, append each unassigned player to a team, reverseing the order of the "teams" array each time a player is
-      added so that the players heights stay uniform among all the teams.
+    - Append the two pre-sorted "experienced" and "inexperienced" player arrays into a single array called "unassignedPlayers".
+         This array already contains equal experienced and inexperienced players ranked in descending order by height (see
+         lines 55 and 56).
+    - Then, append each unassigned player to a team, reverseing the order of the teams in the "teams" array each time anplayer
+         is added so that the players heights stay uniform among all the teams.
  */
 
 var unassignedPlayers: [Any] = []
-var listOfTeamAverageHeights: [Int] = []
 
-for x in 0..<teams.count {                                          // Iterate over a range equal to the number of teams.
-    
-    teams[x].append(experiencedPlayersSorted[0])                    // For each subarray, append the first value of
-                                                                    //     "experiencedPlayersSorted"
-    teamsHeights[x].append(experiencedPlayersSorted[0][1] as! Int)  // Add just the heights to a list for averaging later
-    
-    experiencedPlayersSorted.remove(at: 0)                          // As each player is assigned, romove that player from
-                                                                    //     "experiencedPlayersSorted".
-}
-// ------------------------------------------------------------------------------------------
-
-
-
-// Put all the remaining players together in one list.
+// Put all the players together in one list.
 // ------------------------------------------------------------------------------------------
 for player in experiencedPlayersSorted { unassignedPlayers.append(player) }
 for player in inexperiencedPlayersSorted { unassignedPlayers.append(player) }
 // ------------------------------------------------------------------------------------------
 
 
-/* Read over the remaining (unassigned) players in "unassignedPlayers" and assign each player to a team.
+/* For loop read over the remaining (unassigned) players in "unassignedPlayers" and assign each player to a team.
 
-     NOTE: In line 100 we reverse the order of the teams in the "teams" array each time a player is added to any
+     NOTE: In line 85 we reverse the order of the teams in the "teams" array each time a player is added to any
      team so that player heights are distributed uniformly
 
  */
 // ------------------------------------------------------------------------------------------
-
 for x in 0..<unassignedPlayers.count {
   teams = teams.reversed()
   teams[x % teams.count].append(unassignedPlayers[x])
@@ -103,15 +88,40 @@ for x in 0..<unassignedPlayers.count {
 // ------------------------------------------------------------------------------------------
 
 
+// Calculate the average height of each team
+// ------------------------------------------------------------------------------------------
 
-print("TEAM ONE:")
-print(teams[0])
-print(" ")
-print("TEAM TWO:")
-print(teams[1])
-print(" ")
-print("TEAM THREE:")
-print(teams[2])
+for x in 0..<teams.count {
+    print("---- TEAM #\(x+1) ----")
+    
+    let oneTeam: [Any] = teams[x]
+    var aTeamsHeights: [Int] = []
+    for x in 0..<oneTeam.count {
+        let playerInfo: [Any] = oneTeam[x] as! [Any]
+        aTeamsHeights.append(playerInfo[1] as! Int)
+    }
+    
+    print("(team #\(x+1)'s average height is \(Float(aTeamsHeights.reduce(0, +)) / Float(aTeamsHeights.count)) inches.)")
+    print(" ")
+    for team in oneTeam {
+        print("- \(team)")
+    }
+    print(" ")
+    print("-----------------")
+    print(" ")
+    print(" ")
+}
+// ------------------------------------------------------------------------------------------
+
+
+// Print the player roster for each team.
+// ------------------------------------------------------------------------------------------
+//for x in 0..<teams.count {
+    //print("TEAM", x+1)
+    //print(teams[x])
+    //print(" ")
+//}
+// ------------------------------------------------------------------------------------------
 
 
 
