@@ -27,6 +27,8 @@ let players: [[Any]]  = [
 // This 2D array contains the teams to which players will be assigned. Any number of teams are possible.
 // ------------------------------------------------------------------------------------------
 var teams: [[Any]] = [ [], [], [] ]
+let teamNames: [String] = ["Dragons", "Sharks", "Raptors"]
+let practiceDates: [String] = ["March 17 at 1pm", "March 17 at 3pm", "March 18 at 1pm"]
 var teamsHeights: [Float] = [] // This extra list of just the teams heights is used for averaging later
 // ------------------------------------------------------------------------------------------
 
@@ -88,7 +90,7 @@ for x in 0..<unassignedPlayers.count {
 // ------------------------------------------------------------------------------------------
 
 
-// Calculate the average height of each team
+// Calculate the average height of each team, and print rosters for the teams (for testing).
 // ------------------------------------------------------------------------------------------
 
 for x in 0..<teams.count {
@@ -118,15 +120,18 @@ for x in 0..<teams.count {
 // get the distance between min and max average heights:
 let teamsHeightsRange: Float = ((teamsHeights.max() as! Float) - (teamsHeights.min() as! Float))
 
+var letters = [Int: String]() // Declare a dictionary to hold the letters to guardians.
+
 // To write the letter to the childrens' guardians', we first parse the data from the "teams" array for easy access and printing.
 // ------------------------------------------------------------------------------------------
+var dictCounter: Int = 0
 for x in 0..<teams.count {
     let oneTeam: [Any] = teams[x]
     var aTeamsNames: [String] = []
     var aTeamsHeights: [Int] = []
     var aTeamsExperience: [Bool] = []
     var aTeamsGuardians: [String] = []
-    let teamNumber: Int = x + 1
+    let teamNumber: Int = x
     
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
@@ -139,12 +144,15 @@ for x in 0..<teams.count {
     for x in 0..<oneTeam.count {
         let childName: String = aTeamsNames[x]
         let guardian: String = aTeamsGuardians[x]
-        print("Dear \(guardian):")
-        print("I am writing today to let you know that \(childName) has been assigned to the, as yet unnamed, team number \(teamNumber). Each team has")
-        print("been carefully selected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league.")
-        print("Additionally, the average height of all teams in the league has been kept within a range of \(teamsHeightsRange) inches.")
-        print(" ")
-        
+        letters[dictCounter] = "Dear \(guardian): \n\nI am writing today to let you know that \(childName) has been assigned to team \(teamNames[teamNumber]). Each team has been carefully \nsellected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league. \nAdditionally, the average height of all teams in the league has been kept within a range of \(teamsHeightsRange) inches. For team \n\(teamNames[teamNumber]), the first practice of the season will take place on \(practiceDates[teamNumber]). \n\nBest regards, \nYour Robot Overloard \n\n\n"
+        dictCounter += 1
     }
-
 }
+
+
+// Print all letters from the dictionary "letters."
+// ------------------------------------------------------------------------------------------
+for x in 0..<letters.count {
+        print(letters[x] as! String)
+}
+// ------------------------------------------------------------------------------------------
