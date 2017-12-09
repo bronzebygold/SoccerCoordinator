@@ -1,6 +1,11 @@
-import UIKit
 // Soccer Coordinator - Project #1 for Team Treehouse Techdegree Program
 // by Daniel James Miller (completed Dec. 11, 2017)
+
+/* Note: The number of teams to sort players into may be changed by changing the length of the arrays
+   in lines 59 - 61.
+ */
+
+import UIKit
 
 
 // ---- FUNCTION DECLARATIONS ----
@@ -54,7 +59,7 @@ let players: [[String: Any]]  = [
 var teams: [[Any]] = [ [], [], [] ]
 let teamNames: [String] = ["Dragons", "Sharks", "Raptors"]
 let practiceDates: [String] = ["March 17 at 1pm", "March 17 at 3pm", "March 18 at 1pm"]
-var teamsHeights: [Float] = [] // This extra list of just the teams heights is used for averaging later
+var teamsHeights: [Float] = []    // This extra list of just the teams heights is used for averaging later
 // ------------------------------------------------------------------------------------------
 
 
@@ -68,7 +73,7 @@ var inexperiencedPlayers: [[Any]]  = []
 // Iterate over "players" array and append each player into "experienced" and "inexperienced" lists.
 // ------------------------------------------------------------------------------------------
 for player in players {
-    if (player["isExperienced"] as! Bool) {          // We get just the player's experience data, as a boolean, from each player's array.
+    if (player["isExperienced"] as! Bool) {  // We get just the player's experience data, as a boolean, from each player's array.
         var info: [Any] = []
         for (key, value) in player {
             info.append(value)
@@ -83,10 +88,6 @@ for player in players {
         inexperiencedPlayers.append(info as! [Any])
     }
 }
-print(experiencedPlayers)
-print(" ")
-print(" ")
-print(inexperiencedPlayers)
 // ------------------------------------------------------------------------------------------
 
 
@@ -99,7 +100,7 @@ var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[2] a
  The LOGIC is as follows:
     - Append the two pre-sorted "experienced" and "inexperienced" player arrays into a single array called "unassignedPlayers".
          This array already contains equal experienced and inexperienced players ranked in descending order by height (see
-         lines 74 and 75).
+         lines 112 and 113).
     - Then, append each unassigned player to a team, reverseing the order of the teams in the "teams" array each time anplayer
          is added so that the players heights stay uniform among all the teams.
  */
@@ -115,7 +116,7 @@ for player in inexperiencedPlayersSorted { unassignedPlayers.append(player) }
 
 /* For loop read over the remaining (unassigned) players in "unassignedPlayers" and assign each player to a team.
 
-     NOTE: In line 87 we reverse the order of the teams in the "teams" array each time a player is added to any
+     NOTE: In line 125 we reverse the order of the teams in the "teams" array each time a player is added to any
      team so that player heights are distributed uniformly
 
  */
@@ -130,10 +131,14 @@ for x in 0..<unassignedPlayers.count {
 // Calculate the average height of each team, and print rosters for the teams (for testing).
 // ------------------------------------------------------------------------------------------
 
+print("TEAMS PRINTED HERE FOR TESTING:")
+print("Player info order: [isExperienced, playerName, playerHeight, guardiansNames]")
+print(" ")
 for x in 0..<teams.count {
-    print("---- TEAM #\(x+1) ----")
+    let teamNumber: Int = x
+    print("---- Team \(teamNames[teamNumber]) ----")
     
-    let oneTeam: [Any] = teams[x] // oneTeam is just whichever of the teams we've pulled from "teams" in the for-loop in line 96
+    let oneTeam: [Any] = teams[x] // oneTeam is just whichever of the teams we've pulled from "teams" in the for-loop in line 137
     var aTeamsHeights: [Int] = []
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
@@ -141,13 +146,13 @@ for x in 0..<teams.count {
     }
     teamsHeights.append(average(heights: aTeamsHeights))
     
-    print("(team #\(x+1)'s average height is \(average(heights: aTeamsHeights)) inches.)")
+    print("(team \(teamNames[teamNumber])'s average height is \(average(heights: aTeamsHeights)) inches.)")
     print(" ")
     for player in oneTeam {
         print("- \(player)")
     }
     print(" ")
-    print("-----------------")
+    print("---------------------")
     print(" ")
     print(" ")
     
@@ -178,7 +183,7 @@ for x in 0..<teams.count {
     for x in 0..<oneTeam.count {
         let childName: String = aTeamsNames[x]
         let guardian: String = aTeamsGuardians[x]
-        letters[dictCounter] = "Dear \(guardian): \n\nI am writing today to let you know that \(childName) has been assigned to team \(teamNames[teamNumber]). Each team has been carefully \nsellected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league. \nAdditionally, the average height of all teams in the league has been kept within a range of \(range(averageHeights: teamsHeights)) inches. For team \n\(teamNames[teamNumber]), the first practice of the season will take place on \(practiceDates[teamNumber]). \n\nBest regards, \nYour Robot Overloard \n\n\n"
+        letters[dictCounter] = "Dear \(guardian): \n\nI am writing today to let you know that \(childName) has been assigned to team \(teamNames[teamNumber]). Each team has been carefully \nselected to represent a uniform distribution of prior athletic experience and ability across all teams in the league. \nAdditionally, the average height of all teams in the league has been kept within a range of \(range(averageHeights: teamsHeights)) inches. For team \n\(teamNames[teamNumber]), the first practice of the season will take place on \(practiceDates[teamNumber]). \n\nBest regards, \nYour Robot Overlord \n\n\n"
         dictCounter += 1
     }
 }
@@ -186,6 +191,9 @@ for x in 0..<teams.count {
 
 // Print all letters from the dictionary "letters."
 // ------------------------------------------------------------------------------------------
+print("LETTERS TO GUARDIANS")
+print("---------------------")
+print(" ")
 for x in 0..<letters.count {
     print(letters[x] as! String)
 }
