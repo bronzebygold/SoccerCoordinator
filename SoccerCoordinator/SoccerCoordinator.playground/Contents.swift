@@ -40,7 +40,6 @@ var inexperiencedPlayers: [[Any]]  = []
 
 // Iterate over "players" array and append each player into "experienced" and "inexperienced" lists.
 // ------------------------------------------------------------------------------------------
-
 for player in players {
     if (player[2] as! Bool) {
         experiencedPlayers.append(player)
@@ -59,27 +58,22 @@ var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[1] a
  /*
  The GOAL is to have n number of teams with roughly equal experience level and average height.
  The LOGIC is as follows:
-    - if "teams" arrays are empty, append the next unused value from "experiencedPlayers" to each list
-    - else (if team lists are not empty) alturnatly append the next unused player from "experiencedPlayers" and "inexperiencedPlayers"
-      to whitchever team has the shortest average height.
+    - Since "teams" arrays start out empty, first append the next unused value from "experiencedPlayers" to each list
+    - Append all remaining pre-sorted values into a single array called "playersSortedIntoOneArray". This array already
+      contains equal experienced and inexperienced players ranked in descending order by height.
+    - Finally, append each unassigned player to a team, reverseing the order of the "teams" array each time a player is
+      added so that the players heights stay uniform among all the teams.
  */
 
-
-/*
-Since the for-loop fills all teams in line 78, we only need to check "teams[0]", even if there are more than
-three teams.
-*/
-// ------------------------------------------------------------------------------------------
-
-let firstTeam: [Any] = teams[0]
-var playersSortedIntoOneArray: [Any] = []
+var unassignedPlayers: [Any] = []
 var listOfTeamAverageHeights: [Int] = []
 
-                                                                    // Check if "firstTeam is empty
 for x in 0..<teams.count {                                          // Iterate over a range equal to the number of teams.
+    
     teams[x].append(experiencedPlayersSorted[0])                    // For each subarray, append the first value of
                                                                     //     "experiencedPlayersSorted"
-    teamsHeights[x].append(experiencedPlayersSorted[0][1] as! Int)  // Add just the heights to a list for averaging
+    teamsHeights[x].append(experiencedPlayersSorted[0][1] as! Int)  // Add just the heights to a list for averaging later
+    
     experiencedPlayersSorted.remove(at: 0)                          // As each player is assigned, romove that player from
                                                                     //     "experiencedPlayersSorted".
 }
@@ -89,22 +83,58 @@ for x in 0..<teams.count {                                          // Iterate o
 
 // Put all the remaining players together in one list.
 // ------------------------------------------------------------------------------------------
-for player in experiencedPlayersSorted { playersSortedIntoOneArray.append(player) }
-for player in inexperiencedPlayersSorted { playersSortedIntoOneArray.append(player) }
+for player in experiencedPlayersSorted { unassignedPlayers.append(player) }
+for player in inexperiencedPlayersSorted { unassignedPlayers.append(player) }
 // ------------------------------------------------------------------------------------------
 
 
-for player in playersSortedIntoOneArray {
-    
-    listOfTeamAverageHeights.removeAll()                           // Clear the averages array
-    
-    for teamHeight in teamsHeights {                               // Make a list of the average heights for each team
-        listOfTeamAverageHeights.append(teamHeight.reduce(0, +))
-    }
-}
+/* Read over the remaining (unassigned) players in "unassignedPlayers" and assign each player to a team.
 
-print(teamsHeights)
-print(listOfTeamAverageHeights)
+     NOTE: In line 100 we reverse the order of the teams in the "teams" array each time a player is added to any
+     team so that player heights are distributed uniformly
+
+ */
+// ------------------------------------------------------------------------------------------
+
+for x in 0..<unassignedPlayers.count {
+  teams = teams.reversed()
+  teams[x % teams.count].append(unassignedPlayers[x])
+}
+// ------------------------------------------------------------------------------------------
+
+
+
+print("TEAM ONE:")
+print(teams[0])
+print(" ")
+print("TEAM TWO:")
+print(teams[1])
+print(" ")
+print("TEAM THREE:")
+print(teams[2])
+
+
+
+
+
+
+//listOfTeamAverageHeights.removeAll()                           // Clear the averages array
+
+//for teamHeight in teamsHeights {                               // Make a list of the average heights for each team
+    //listOfTeamAverageHeights.append((teamHeight.reduce(0, +)) / teamHeight.count)
+//}
+
+//let indx = (listOfTeamAverageHeights.index(of: listOfTeamAverageHeights.max() as! Int) as! Int) // Get the index of the shortest team.
+
+//teams[indx].append(playersSortedIntoOneArray[x])
+//teamsHeights[indx].append(experiencedPlayersSorted[0][1] as! Int)
+
+//sorted(teams, key=len)
+
+
+
+
+
 
 
 
