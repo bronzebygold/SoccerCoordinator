@@ -1,7 +1,7 @@
+import UIKit
 // Soccer Coordinator - Project #1 for Team Treehouse Techdegree Program
 // by Daniel James Miller (completed Dec. 11, 2017)
 
-import UIKit
 
 // ---- FUNCTION DECLARATIONS ----
 
@@ -27,25 +27,25 @@ func range(averageHeights: [Float]) -> Float {
 
 // A 2D array is used to hold all player info.
 // Each index spot in "players" array contains an array listing that player's name, height, experience (as a bool) and guardians name/s.
-let players: [[Any]]  = [
-    ["Joe Smith", 42, true, "Jim and Jan Smith"],
-    ["Jill Tanner", 36, true, "Clara Tanner"],
-    ["Bill Bon", 43, true, "Sara and Jenny Bon"],
-    ["Eva Gordon", 45, false, "Wendy and Mike Gordon"],
-    ["Matt Gill", 40, false, "Charles and Sylvia Gill"],
-    ["Kimmy Stein", 41, false, "Bill and Hillary Stein"],
-    ["Sammy Adams", 45, false, "Jeff Adams"],
-    ["Karl Saygan", 42, true, "Heather Bledsoe"],
-    ["Suzane Greenberg", 44, true, "Henrietta Dumas"],
-    ["Sal Dali", 41, false, "Gala Dali"],
-    ["Joe Kavalier", 39, false, "Sam and Elaine Kavalier"],
-    ["Ben Finkelstein", 44, false, "Aaron and Jill Finkelstein"],
-    ["Diego Soto", 41, true, "Robin and Sarika Soto"],
-    ["Chloe Alaska", 47, false, "David and Jamie Alaska"],
-    ["Arnold Willis", 43, false, "Claire Willis"],
-    ["Phillip Helm", 44, true, "Thomas Helm and Eva Jones"],
-    ["Les Clay", 42, true, "Wynonna Brown"],
-    ["Herschel Krustofski", 45, true, "Hyman and Rachel Krustofski"],
+let players: [[String: Any]]  = [
+    ["playerName": "Joe Smith", "height": 42, "isExperienced": true, "guardians": "Jim and Jan Smith"],
+    ["playerName": "Jill Tanner", "height": 36, "isExperienced": true, "guardians": "Clara Tanner"],
+    ["playerName": "Bill Bon", "height": 43, "isExperienced": true, "guardians": "Sara and Jenny Bon"],
+    ["playerName": "Eva Gordon", "height": 45, "isExperienced": false, "guardians": "Wendy and Mike Gordon"],
+    ["playerName": "Matt Gill", "height": 40, "isExperienced": false, "guardians": "Charles and Sylvia Gill"],
+    ["playerName": "Kimmy Stein", "height": 41, "isExperienced": false, "guardians": "Bill and Hillary Stein"],
+    ["playerName": "Sammy Adams", "height": 45, "isExperienced": false, "guardians": "Jeff Adams"],
+    ["playerName": "Karl Saygan", "height": 42, "isExperienced": true, "guardians": "Heather Bledsoe"],
+    ["playerName": "Suzane Greenberg", "height": 44, "isExperienced": true, "guardians": "Henrietta Dumas"],
+    ["playerName": "Sal Dali", "height": 41, "isExperienced": false, "guardians": "Gala Dali"],
+    ["playerName": "Joe Kavalier", "height": 39, "isExperienced": false, "guardians": "Sam and Elaine Kavalier"],
+    ["playerName": "Ben Finkelstein", "height": 44, "isExperienced": false, "guardians": "Aaron and Jill Finkelstein"],
+    ["playerName": "Diego Soto", "height": 41, "isExperienced": true, "guardians": "Robin and Sarika Soto"],
+    ["playerName": "Chloe Alaska", "height": 47, "isExperienced": false, "guardians": "David and Jamie Alaska"],
+    ["playerName": "Arnold Willis", "height": 43, "isExperienced": false, "guardians": "Claire Willis"],
+    ["playerName": "Phillip Helm", "height": 44, "isExperienced": true, "guardians": "Thomas Helm and Eva Jones"],
+    ["playerName": "Les Clay", "height": 42, "isExperienced": true, "guardians": "Wynonna Brown"],
+    ["playerName": "Herschel Krustofski", "height": 45, "isExperienced": true, "guardians": "Hyman and Rachel Krustofski"],
 ]
 
 
@@ -68,19 +68,31 @@ var inexperiencedPlayers: [[Any]]  = []
 // Iterate over "players" array and append each player into "experienced" and "inexperienced" lists.
 // ------------------------------------------------------------------------------------------
 for player in players {
-    if (player[2] as! Bool) {              // We get just the player's experience data, as a boolean, from each player's array.
-        experiencedPlayers.append(player)
+    if (player["isExperienced"] as! Bool) {          // We get just the player's experience data, as a boolean, from each player's array.
+        var info: [Any] = []
+        for (key, value) in player {
+            info.append(value)
+        }
+        experiencedPlayers.append(info as! [Any])
     }
     else {
-        inexperiencedPlayers.append(player)
+        var info: [Any] = []
+        for (key, value) in player {
+            info.append(value)
+        }
+        inexperiencedPlayers.append(info as! [Any])
     }
 }
+print(experiencedPlayers)
+print(" ")
+print(" ")
+print(inexperiencedPlayers)
 // ------------------------------------------------------------------------------------------
 
 
 // Sort both "experiencedPlayers" and "inexperiencedPlayers" in decending order by height
-var experiencedPlayersSorted: [[Any]] = experiencedPlayers.sorted { ($0[1] as! Int) > ($1[1] as! Int) }
-var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[1] as! Int) > ($1[1] as! Int) }
+var experiencedPlayersSorted: [[Any]] = experiencedPlayers.sorted { ($0[2] as! Int) > ($1[2] as! Int) }
+var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[2] as! Int) > ($1[2] as! Int) }
 
  /*
  The GOAL is to have n-number of teams with roughly equal experience level and average height varying not more than 1.5in.
@@ -125,7 +137,7 @@ for x in 0..<teams.count {
     var aTeamsHeights: [Int] = []
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
-        aTeamsHeights.append(playerInfo[1] as! Int)
+        aTeamsHeights.append(playerInfo[2] as! Int)
     }
     teamsHeights.append(average(heights: aTeamsHeights))
     
@@ -157,9 +169,9 @@ for x in 0..<teams.count {
     
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
-        aTeamsNames.append(playerInfo[0] as! String)
-        aTeamsHeights.append(playerInfo[1] as! Int)
-        aTeamsExperience.append(playerInfo[2] as! Bool)
+        aTeamsNames.append(playerInfo[1] as! String)
+        aTeamsHeights.append(playerInfo[2] as! Int)
+        aTeamsExperience.append(playerInfo[0] as! Bool)
         aTeamsGuardians.append(playerInfo[3] as! String)
     }
     
