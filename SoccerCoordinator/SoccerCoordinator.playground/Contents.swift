@@ -27,7 +27,7 @@ let players: [[Any]]  = [
 // This 2D array contains the teams to which players will be assigned. Any number of teams are possible.
 // ------------------------------------------------------------------------------------------
 var teams: [[Any]] = [ [], [], [] ]
-var teamsHeights: [[Int]] = [ [], [], [] ] // This extra list of just the teams heights is used for averaging later
+var teamsHeights: [Float] = [] // This extra list of just the teams heights is used for averaging later
 // ------------------------------------------------------------------------------------------
 
 
@@ -41,7 +41,7 @@ var inexperiencedPlayers: [[Any]]  = []
 // Iterate over "players" array and append each player into "experienced" and "inexperienced" lists.
 // ------------------------------------------------------------------------------------------
 for player in players {
-    if (player[2] as! Bool) {
+    if (player[2] as! Bool) {              // We get just the player's experience data, as a boolean, from each player's array.
         experiencedPlayers.append(player)
     }
     else {
@@ -94,21 +94,57 @@ for x in 0..<unassignedPlayers.count {
 for x in 0..<teams.count {
     print("---- TEAM #\(x+1) ----")
     
-    let oneTeam: [Any] = teams[x]
+    let oneTeam: [Any] = teams[x] // oneTeam is just whichever of the teams we've pulled from "teams" in line 94
     var aTeamsHeights: [Int] = []
     for x in 0..<oneTeam.count {
         let playerInfo: [Any] = oneTeam[x] as! [Any]
         aTeamsHeights.append(playerInfo[1] as! Int)
     }
+    teamsHeights.append((Float(aTeamsHeights.reduce(0, +)) / Float(aTeamsHeights.count)))
     
     print("(team #\(x+1)'s average height is \(Float(aTeamsHeights.reduce(0, +)) / Float(aTeamsHeights.count)) inches.)")
     print(" ")
-    for team in oneTeam {
-        print("- \(team)")
+    for player in oneTeam {
+        print("- \(player)")
     }
     print(" ")
     print("-----------------")
     print(" ")
     print(" ")
+    
 }
 // ------------------------------------------------------------------------------------------
+
+// get the distance between min and max average heights:
+let teamsHeightsRange: Float = ((teamsHeights.max() as! Float) - (teamsHeights.min() as! Float))
+
+// To write the letter to the childrens' guardians', we first parse the data from the "teams" array for easy access and printing.
+// ------------------------------------------------------------------------------------------
+for x in 0..<teams.count {
+    let oneTeam: [Any] = teams[x]
+    var aTeamsNames: [String] = []
+    var aTeamsHeights: [Int] = []
+    var aTeamsExperience: [Bool] = []
+    var aTeamsGuardians: [String] = []
+    let teamNumber: Int = x + 1
+    
+    for x in 0..<oneTeam.count {
+        let playerInfo: [Any] = oneTeam[x] as! [Any]
+        aTeamsNames.append(playerInfo[0] as! String)
+        aTeamsHeights.append(playerInfo[1] as! Int)
+        aTeamsExperience.append(playerInfo[2] as! Bool)
+        aTeamsGuardians.append(playerInfo[3] as! String)
+    }
+    
+    for x in 0..<oneTeam.count {
+        let childName: String = aTeamsNames[x]
+        let guardian: String = aTeamsGuardians[x]
+        print("Dear \(guardian):")
+        print("I am writing today to let you know that \(childName) has been assigned to the, as yet unnamed, team number \(teamNumber). Each team has")
+        print("been carefully selected to reprosent a uniform distribution of prior athletic experience and ability accross all teams in the league.")
+        print("Additionally, the average height of all teams in the league has been kept within a range of \(teamsHeightsRange) inches.")
+        print(" ")
+        
+    }
+
+}
