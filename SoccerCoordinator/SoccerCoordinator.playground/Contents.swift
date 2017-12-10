@@ -91,7 +91,7 @@ for player in players {
 // ------------------------------------------------------------------------------------------
 
 
-// Sort both "experiencedPlayers" and "inexperiencedPlayers" in decending order by height
+// Sort both "experiencedPlayers" and "inexperiencedPlayers" in descending order by height
 var experiencedPlayersSorted: [[Any]] = experiencedPlayers.sorted { ($0[2] as! Int) > ($1[2] as! Int) }
 var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[2] as! Int) > ($1[2] as! Int) }
 
@@ -101,7 +101,7 @@ var inexperiencedPlayersSorted: [[Any]] = inexperiencedPlayers.sorted { ($0[2] a
     - Append the two pre-sorted "experienced" and "inexperienced" player arrays into a single array called "unassignedPlayers".
          This array already contains equal experienced and inexperienced players ranked in descending order by height (see
          lines 112 and 113).
-    - Then, append each unassigned player to a team, reverseing the order of the teams in the "teams" array each time anplayer
+    - Then, append each unassigned player to a team, reversing the order of the teams in the "teams" array each time a player
          is added so that the players heights stay uniform among all the teams.
  */
 
